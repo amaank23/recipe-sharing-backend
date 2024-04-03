@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class PostCommentsTableCreated1712182679182 implements MigrationInterface {
-    name = 'PostCommentsTableCreated1712182679182'
+export class PostCommentsTableCreated1712183218265 implements MigrationInterface {
+    name = 'PostCommentsTableCreated1712183218265'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "post_comments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "comment" character varying NOT NULL, "created_at" TIMESTAMP NOT NULL DEFAULT ('now'::text)::timestamp(6) with time zone, "updated_at" TIMESTAMP NOT NULL DEFAULT ('now'::text)::timestamp(6) with time zone, "postId" uuid, "userId" uuid, "parentCommentId" uuid, CONSTRAINT "PK_2e99e04b4a1b31de6f833c18ced" PRIMARY KEY ("id"))`);

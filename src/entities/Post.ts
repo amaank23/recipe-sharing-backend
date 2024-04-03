@@ -10,6 +10,7 @@ import {
 import User from "./User";
 import PostLikes from "./PostLikes";
 import PostImages from "./PostImages";
+import PostComments from "./PostComments";
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn("uuid")
@@ -26,6 +27,9 @@ export class Post {
 
   @OneToMany(() => PostImages, (postImages) => postImages.id)
   postImages: PostImages[];
+
+  @OneToMany(() => PostComments, (postComments) => postComments.id)
+  postComments: PostComments[];
 
   @CreateDateColumn({
     type: "timestamp",
