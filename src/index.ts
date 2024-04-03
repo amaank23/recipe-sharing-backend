@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import morgan from "morgan";
 import cors from "cors";
 import express from "express";
@@ -5,6 +6,7 @@ import swaggerUI from "swagger-ui-express";
 import swaggerSpec from "./swagger/config";
 import { myDataSource } from "./app-data-source";
 import "dotenv/config";
+
 myDataSource
   .initialize()
   .then(() => {

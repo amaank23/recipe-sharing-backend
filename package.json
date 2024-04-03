@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "typeorm:generate": "npx typeorm-ts-node-esm migration:generate -d src/app-data-source.ts",
+    "typeorm:migrate": "npx typeorm-ts-node-esm migration:run -d src/app-data-source.ts",
+    "typeorm:revert": "npx typeorm-ts-node-esm migration:revert -d src/app-data-source.ts",
+    "typeorm:drop": "npx typeorm-ts-node-esm schema:drop -d src/app-data-source.ts"
   },
   "nodemonConfig": {
     "watch": [
