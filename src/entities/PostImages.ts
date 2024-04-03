@@ -5,27 +5,18 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from "typeorm";
-import User from "./User";
-import PostLikes from "./PostLikes";
-import PostImages from "./PostImages";
+import Post from "./Post";
 @Entity()
-export class Post {
+export class PostImages {
   @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @Column()
-  content: string;
+  url: string;
 
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
-
-  @OneToMany(() => PostLikes, (postLikes) => postLikes.id)
-  postLikes: PostLikes[];
-
-  @OneToMany(() => PostImages, (postImages) => postImages.id)
-  postImages: PostImages[];
+  @ManyToOne(() => Post, (post) => post.id)
+  post: Post;
 
   @CreateDateColumn({
     type: "timestamp",
@@ -41,4 +32,4 @@ export class Post {
   public updated_at: Date;
 }
 
-export default Post;
+export default PostImages;

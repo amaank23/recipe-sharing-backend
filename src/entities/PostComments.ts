@@ -7,25 +7,30 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
+import Post from "./Post";
 import User from "./User";
-import PostLikes from "./PostLikes";
-import PostImages from "./PostImages";
 @Entity()
-export class Post {
+export class PostComments {
   @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @Column()
-  content: string;
+  comment: string;
+
+  @ManyToOne(() => Post, (post) => post.id)
+  post: Post;
 
   @ManyToOne(() => User, (user) => user.id)
-  user: User;
+  user: Post;
 
-  @OneToMany(() => PostLikes, (postLikes) => postLikes.id)
-  postLikes: PostLikes[];
+  @ManyToOne(
+    () => PostComments,
+    (postComments) => postComments.childrenComments
+  )
+  parentComment: PostComments;
 
-  @OneToMany(() => PostImages, (postImages) => postImages.id)
-  postImages: PostImages[];
+  @OneToMany(() => PostComments, (postComments) => postComments.parentComment)
+  childrenComments: PostComments[];
 
   @CreateDateColumn({
     type: "timestamp",
@@ -41,4 +46,4 @@ export class Post {
   public updated_at: Date;
 }
 
-export default Post;
+export default PostComments;
