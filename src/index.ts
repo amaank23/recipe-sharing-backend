@@ -9,6 +9,7 @@ import UserRouter from "./routes/users";
 import PostRouter from "./routes/posts";
 import CommentsRouter from "./routes/comments";
 import "dotenv/config";
+import errorMiddleware from "./middlewares/errorMiddleware";
 
 myDataSource
   .initialize()
@@ -26,9 +27,11 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
-app.use("/users", UserRouter);
-app.use("/comments", CommentsRouter);
-app.use("/posts", PostRouter);
+app.use("/api/users", UserRouter);
+app.use("/api/comments", CommentsRouter);
+app.use("/api/posts", PostRouter);
+
+app.use(errorMiddleware);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
