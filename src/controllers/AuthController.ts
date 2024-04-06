@@ -77,9 +77,12 @@ async function signIn(req: Request, res: Response, next: NextFunction) {
       isVerified: user.isVerified,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
+      id: user.id,
     };
     if (!body.isVerified) {
       const otp = +UserRepository.generateOtp();
+      user.otp = otp;
+      await UserRepository.save(user);
       UserRepository.sendOtp(email, `Otp is ${otp}`);
       throw new CustomError(
         "Account Verification Required, check your email or phone no for OTP",
@@ -121,6 +124,7 @@ async function verifyOtp(req: Request, res: Response, next: NextFunction) {
       isVerified: user.isVerified,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
+      id: user.id,
     };
     let token = UserRepository.generateToken(body);
     res.status(200).json({ message: SUCCESSFULLY_VERFIED, user: body, token });

@@ -52,4 +52,16 @@ export const UserRepository = myDataSource.getRepository(User).extend({
     );
     return token;
   },
+  verifyToken(token: string): any {
+    try {
+      const decoded = jwt.verify(token, process.env.secretKey);
+      return decoded;
+    } catch (error) {
+      if (error.name === "JsonWebTokenError") {
+        return { error: "Invalid token" };
+      } else {
+        return { error: "Internal server error" };
+      }
+    }
+  },
 });

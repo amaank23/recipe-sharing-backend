@@ -16,7 +16,7 @@ export class Post {
   @PrimaryGeneratedColumn("uuid")
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   content: string;
 
   @ManyToOne(() => User, (user) => user.id)
