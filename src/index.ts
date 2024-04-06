@@ -5,7 +5,7 @@ import express from "express";
 import swaggerUI from "swagger-ui-express";
 import swaggerSpec from "./swagger/config";
 import { myDataSource } from "./app-data-source";
-import UserRouter from "./routes/users";
+import AuthRouter from "./routes/auth";
 import PostRouter from "./routes/posts";
 import CommentsRouter from "./routes/comments";
 import "dotenv/config";
@@ -27,7 +27,9 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
-app.use("/api/users", UserRouter);
+
+// API ROUTES
+app.use("/api/auth", AuthRouter);
 app.use("/api/comments", CommentsRouter);
 app.use("/api/posts", PostRouter);
 

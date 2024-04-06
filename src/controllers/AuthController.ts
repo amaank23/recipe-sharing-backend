@@ -3,13 +3,16 @@ import CustomError from "../utils/error";
 import { UserRepository } from "../repository/user.repository";
 import {
   EMAIL_ALREADY_EXIST,
+  INCORRECT_PASSWORD,
   INVALID_OTP,
   INVALID_USER,
+  NOT_FOUND_EMAIL,
   PHONE_ALREADY_EXIST,
+  SUCCESS_LOGGED_IN,
   SUCCESSFULLY_VERFIED,
   USER_CREATED_SUCCESSFULLY,
 } from "../utils/constants";
-import { generateHashedPassword } from "../utils/hashing";
+import { compareHashes, generateHashedPassword } from "../utils/hashing";
 import User from "../entities/User";
 
 async function signUp(req: Request, res: Response, next: NextFunction) {
@@ -55,6 +58,49 @@ async function signUp(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function signIn(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email, password } = req.body;
+    const user: User = await UserRepository.findByEmail(email);
+    if (!user) {
+      throw new CustomError(NOT_FOUND_EMAIL, 401).errorInstance();
+    }
+    const isMatch = await compareHashes(password, user.password);
+    if (!isMatch) {
+      throw new CustomError(INCORRECT_PASSWORD, 401).errorInstance();
+    }
+    const body = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      isVerified: user.isVerified,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
+    };
+    if (!body.isVerified) {
+      const otp = +UserRepository.generateOtp();
+      UserRepository.sendOtp(email, `Otp is ${otp}`);
+      throw new CustomError(
+        "Account Verification Required, check your email or phone no for OTP",
+        403
+      ).errorInstance();
+    }
+    let token = UserRepository.generateToken(body);
+    res.status(200).json({
+      message: SUCCESS_LOGGED_IN,
+      user: body,
+      token,
+    });
+  } catch (error) {
+    const errors = {
+      status: CustomError.getStatusCode(error),
+      message: CustomError.getMessage(error),
+    };
+    next(errors);
+  }
+}
+
 async function verifyOtp(req: Request, res: Response, next: NextFunction) {
   try {
     const { otp, email } = req.body;
@@ -87,4 +133,4 @@ async function verifyOtp(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { signUp, verifyOtp };
+export default { signUp, verifyOtp, signIn };

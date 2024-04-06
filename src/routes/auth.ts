@@ -1,15 +1,15 @@
-import express, { Request, Response } from "express";
-import usersController from "../controllers/usersController";
-import validations from "./../validations";
+import express from "express";
+import authController from "../controllers/AuthController";
+import validations from "../validations";
 import validationMiddleware from "../middlewares/validationMiddleware";
 const router = express.Router();
 
 /**
  * @openapi
- * '/api/users':
+ * '/api/auth/register':
  *  post:
  *     tags:
- *     - Users
+ *     - Auth
  *     summary: Create a new user
  *     requestBody:
  *      required: true
@@ -45,18 +45,60 @@ const router = express.Router();
  *        description: Server Error
  */
 router.post(
-  "/",
+  "/register",
   validations.signupValidator,
   validationMiddleware,
-  usersController.signUp
+  authController.signUp
 );
 
 /**
  * @openapi
- * '/api/users/verify':
+ * '/api/auth/login':
  *  post:
  *     tags:
- *     - Users
+ *     - Auth
+ *     summary: Sign in User
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *            required:
+ *              - email
+ *              - password
+ *            properties:
+ *              email:
+ *                type: string
+ *              password:
+ *                type: string
+ *     responses:
+ *      200:
+ *        description: Successfully Logged In
+ *      400:
+ *        description: Fields Empty
+ *      401:
+ *        description: Incorrect Credentials
+ *      403:
+ *        description: Account Verification Required
+ *      404:
+ *        description: User Not Found
+ *      500:
+ *        description: Server Error
+ */
+router.post(
+  "/login",
+  validations.signinValidator,
+  validationMiddleware,
+  authController.signIn
+);
+
+/**
+ * @openapi
+ * '/api/auth/verify-otp':
+ *  patch:
+ *     tags:
+ *     - Auth
  *     summary: Verify Otp
  *     requestBody:
  *      required: true
@@ -82,11 +124,11 @@ router.post(
  *      500:
  *        description: Server Error
  */
-router.post(
-  "/verify",
+router.patch(
+  "/verify-otp",
   validations.otpValidator,
   validationMiddleware,
-  usersController.verifyOtp
+  authController.verifyOtp
 );
 
 export default router;
