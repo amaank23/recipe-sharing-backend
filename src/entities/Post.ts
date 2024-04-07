@@ -22,13 +22,13 @@ export class Post {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @OneToMany(() => PostLikes, (postLikes) => postLikes.id)
+  @OneToMany(() => PostLikes, (postLikes) => postLikes.post)
   postLikes: PostLikes[];
 
-  @OneToMany(() => PostImages, (postImages) => postImages.id)
+  @OneToMany(() => PostImages, (postImages) => postImages.post)
   postImages: PostImages[];
 
-  @OneToMany(() => PostComments, (postComments) => postComments.id)
+  @OneToMany(() => PostComments, (postComments) => postComments.post)
   postComments: PostComments[];
 
   @CreateDateColumn({

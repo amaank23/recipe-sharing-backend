@@ -42,4 +42,40 @@ const router = express.Router();
  */
 router.post("/", authMiddleware, fileUpload(), PostController.create);
 
+/**
+ * @openapi
+ *  components:
+ *    securitySchemes:
+ *      bearerAuth:
+ *        type: http
+ *        scheme: bearer
+ *        bearerFormat: JWT
+ * '/api/posts':
+ *  get:
+ *     tags:
+ *     - Posts
+ *     summary: Get all posts by userId
+ *     parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            required: true
+ *          - in: query
+ *            name: limit
+ *            schema:
+ *              type: integer
+ *            required: true
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *      200:
+ *        description: get All Posts
+ *      400:
+ *        description: Query Parameters Empty
+ *      500:
+ *        description: Server Error
+ */
+router.get("/", authMiddleware, PostController.getAll);
+
 export default router;

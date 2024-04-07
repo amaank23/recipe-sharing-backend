@@ -15,7 +15,7 @@ export class PostImages {
   @Column()
   url: string;
 
-  @ManyToOne(() => Post, (post) => post.id)
+  @ManyToOne(() => Post, (post) => post.postImages)
   post: Post;
 
   @CreateDateColumn({

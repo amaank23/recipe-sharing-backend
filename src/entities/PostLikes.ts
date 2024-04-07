@@ -19,7 +19,7 @@ export class PostLikes {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @ManyToOne(() => Post, (post) => post.id)
+  @ManyToOne(() => Post, (post) => post.postLikes)
   post: Post;
 
   @CreateDateColumn({
