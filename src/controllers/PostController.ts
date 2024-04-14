@@ -4,7 +4,6 @@ import Post from "../entities/Post";
 import { PostRepository } from "../repository/post.repository";
 import CustomError from "../utils/error";
 import { CustomRequest } from "../middlewares/authMiddleware";
-import PostImages from "../entities/PostImages";
 
 async function create(req: CustomRequest, res: Response, next: NextFunction) {
   try {
@@ -16,7 +15,8 @@ async function create(req: CustomRequest, res: Response, next: NextFunction) {
       post.content = req.body.postContent;
     }
     await PostRepository.save(post);
-    if ("images" in req.files) {
+
+    if (req.files && "images" in req.files) {
       const files = await PostImagesRepository.uploadImages(
         req.files.images,
         post.id
@@ -51,6 +51,7 @@ async function getAll(req: CustomRequest, res: Response, next: NextFunction) {
       .loadRelationCountAndMap("post.likesCount", "post.postLikes")
       .limit(+limit)
       .offset(itemsToSkip)
+      .orderBy("post.created_at", "DESC")
       .getMany();
     res
       .status(200)

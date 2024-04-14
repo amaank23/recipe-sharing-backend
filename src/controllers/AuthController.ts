@@ -85,7 +85,7 @@ async function signIn(req: Request, res: Response, next: NextFunction) {
       await UserRepository.save(user);
       UserRepository.sendOtp(email, `Otp is ${otp}`);
       throw new CustomError(
-        "Account Verification Required, check your email or phone no for OTP",
+        "Account Verification Required, check your email for OTP",
         403
       ).errorInstance();
     }
