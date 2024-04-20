@@ -78,4 +78,81 @@ router.post("/", authMiddleware, fileUpload(), PostController.create);
  */
 router.get("/", authMiddleware, PostController.getAll);
 
+/**
+ * @openapi
+ *  components:
+ *    securitySchemes:
+ *      bearerAuth:
+ *        type: http
+ *        scheme: bearer
+ *        bearerFormat: JWT
+ * '/api/posts/{postId}/likes':
+ *  post:
+ *     tags:
+ *     - Posts
+ *     summary: Like or unlike a post
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: uuid of post
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *      201:
+ *        description: Liked a Post
+ *      200:
+ *        description: UnLike a Post
+ *      404:
+ *        description: Post does not exist
+ *      500:
+ *        description: Server Error
+ */
+router.post("/:postId/likes", authMiddleware, PostController.addLikeToPost);
+
+/**
+ * @openapi
+ *  components:
+ *    securitySchemes:
+ *      bearerAuth:
+ *        type: http
+ *        scheme: bearer
+ *        bearerFormat: JWT
+ * '/api/posts/{postId}/comments':
+ *  post:
+ *     tags:
+ *     - Posts
+ *     summary: add a new comment
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *            required:
+ *              - comment
+ *            properties:
+ *              comment:
+ *                type: string
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: uuid of post
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *      201:
+ *        description: Comment Added Successfully
+ *      404:
+ *        description: Post does not exist
+ *      500:
+ *        description: Server Error
+ */
+router.post("/:postId/comments", authMiddleware, PostController.addComment);
+
 export default router;

@@ -13,9 +13,6 @@ export class PostLikes {
   @PrimaryGeneratedColumn("uuid")
   id: number;
 
-  @Column()
-  content: string;
-
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 

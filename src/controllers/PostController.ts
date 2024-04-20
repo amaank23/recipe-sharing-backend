@@ -4,6 +4,9 @@ import Post from "../entities/Post";
 import { PostRepository } from "../repository/post.repository";
 import CustomError from "../utils/error";
 import { CustomRequest } from "../middlewares/authMiddleware";
+import { PostLikesRepository } from "../repository/postLikes.repository";
+import PostLikes from "../entities/PostLikes";
+import { PostCommentsRepository } from "../repository/postComments.repository";
 
 async function create(req: CustomRequest, res: Response, next: NextFunction) {
   try {
@@ -64,5 +67,106 @@ async function getAll(req: CustomRequest, res: Response, next: NextFunction) {
     next(errors);
   }
 }
+async function addLikeToPost(
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.data.id;
 
-export default { create, getAll };
+    // check if post exist
+    const post = await PostRepository.createQueryBuilder("post")
+      .where("post.id = :postId", { postId })
+      .getOne();
+    if (!post) {
+      throw new CustomError(
+        "Post with the assosiate id does not exist!",
+        404
+      ).errorInstance();
+    }
+    // check if like exist if it does remove like
+    const postLike = await PostLikesRepository.createQueryBuilder("postLikes")
+      .where("postLikes.postId = :postId", { postId })
+      .andWhere("postLikes.userId = :userId", { userId })
+      .getOne();
+
+    if (postLike) {
+      // delete a like
+      await PostLikesRepository.createQueryBuilder("postLikes")
+        .delete()
+        .from(PostLikes)
+        .where("id = :id", { id: postLike.id })
+        .execute();
+      return res.status(200).json({ message: "Post UnLiked Successfully" });
+    } else {
+      // add a new like
+      await PostLikesRepository.createQueryBuilder("postLikes")
+        .insert()
+        .values({
+          post: () => "'" + postId + "'",
+          user: () => "'" + userId + "'",
+        })
+        .execute();
+      res.status(201).json({ message: "Post Liked Successfully" });
+    }
+  } catch (error) {
+    const errors = {
+      status: CustomError.getStatusCode(error),
+      message: CustomError.getMessage(error),
+    };
+    next(errors);
+  }
+}
+
+export async function addComment(
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.data.id;
+    const { comment } = req.body;
+    // check if post exist
+    const post = await PostRepository.createQueryBuilder("post")
+      .where("post.id = :postId", { postId })
+      .getOne();
+    if (!post) {
+      throw new CustomError(
+        "Post with the assosiate id does not exist!",
+        404
+      ).errorInstance();
+    }
+
+    // add new comment
+    const newComment = await PostCommentsRepository.createQueryBuilder(
+      "postComments"
+    )
+      .insert()
+      .values({
+        comment,
+        post: () => "'" + postId + "'",
+        user: () => "'" + userId + "'",
+      })
+      .execute();
+    const newCommentId = newComment.identifiers[0].id;
+
+    const newlyAddedComment = await PostCommentsRepository.findOne({
+      where: { id: newCommentId },
+    });
+    res.status(201).json({
+      message: "Comment Added Successfully!",
+      comment: newlyAddedComment,
+    });
+  } catch (error) {
+    const errors = {
+      status: CustomError.getStatusCode(error),
+      message: CustomError.getMessage(error),
+    };
+    next(errors);
+  }
+}
+
+export default { create, getAll, addLikeToPost, addComment };
