@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
 import { CreateDateColumn, UpdateDateColumn } from "typeorm";
+import Profile from "./Profile";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -25,6 +26,9 @@ export class User {
 
   @Column()
   otp: number;
+
+  @OneToOne(() => Profile, (profile) => profile.user)
+  profile: Profile;
 
   @CreateDateColumn({
     type: "timestamp",
