@@ -11,21 +11,21 @@ import User from "./User";
 @Entity()
 export class Profile {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
-  @Column()
+  @Column({ nullable: true })
   about: string;
 
-  @Column()
+  @Column({ nullable: true })
   profileImgUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   coverImgUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   country: string;
 
-  @Column()
+  @Column({ nullable: true })
   city: string;
 
   @OneToOne(() => User, (user) => user.profile)

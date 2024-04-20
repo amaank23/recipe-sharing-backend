@@ -7,7 +7,7 @@ import swaggerSpec from "./swagger/config";
 import { myDataSource } from "./app-data-source";
 import AuthRouter from "./routes/auth";
 import PostRouter from "./routes/posts";
-import CommentsRouter from "./routes/comments";
+import ProfilesRouter from "./routes/profiles";
 import "dotenv/config";
 import errorMiddleware from "./middlewares/errorMiddleware";
 
@@ -30,7 +30,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // API ROUTES
 app.use("/api/auth", AuthRouter);
-app.use("/api/comments", CommentsRouter);
+app.use("/api/profiles", ProfilesRouter);
 app.use("/api/posts", PostRouter);
 
 app.use(errorMiddleware);
