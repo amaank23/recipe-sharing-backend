@@ -169,4 +169,38 @@ export async function addComment(
   }
 }
 
-export default { create, getAll, addLikeToPost, addComment };
+export async function getAllComments(
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { postId } = req.params;
+    const post = await PostRepository.createQueryBuilder("post")
+      .where("post.id = :postId", { postId })
+      .getOne();
+    if (!post) {
+      throw new CustomError(
+        "Post with the assosiate id does not exist!",
+        404
+      ).errorInstance();
+    }
+    const comments = await PostCommentsRepository.createQueryBuilder(
+      "postComments"
+    )
+      .where("postComments.postId = :postId", { postId })
+      .orderBy("created_at", "DESC")
+      .getMany();
+    res
+      .status(200)
+      .json({ message: "Comments Successfully Retrieved", data: comments });
+  } catch (error) {
+    const errors = {
+      status: CustomError.getStatusCode(error),
+      message: CustomError.getMessage(error),
+    };
+    next(errors);
+  }
+}
+
+export default { create, getAll, addLikeToPost, addComment, getAllComments };

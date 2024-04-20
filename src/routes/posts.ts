@@ -155,4 +155,37 @@ router.post("/:postId/likes", authMiddleware, PostController.addLikeToPost);
  */
 router.post("/:postId/comments", authMiddleware, PostController.addComment);
 
+/**
+ * @openapi
+ *  components:
+ *    securitySchemes:
+ *      bearerAuth:
+ *        type: http
+ *        scheme: bearer
+ *        bearerFormat: JWT
+ * '/api/posts/{postId}/comments':
+ *  get:
+ *     tags:
+ *     - Posts
+ *     summary: Get all comments by postId
+ *     parameters:
+ *          - in: path
+ *            name: postId
+ *            schema:
+ *              type: string
+ *            required: true
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *      200:
+ *        description: get All Comments
+ *      404:
+ *        description: Post not Found
+ *      400:
+ *        description: Query Parameters Empty
+ *      500:
+ *        description: Server Error
+ */
+router.get("/:postId/comments", authMiddleware, PostController.getAllComments);
+
 export default router;
