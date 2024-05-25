@@ -28,6 +28,15 @@ export class Profile {
   @Column({ nullable: true })
   city: string;
 
+  @Column({ nullable: true })
+  postsCount: number;
+
+  @Column({ nullable: true })
+  recipesCount: number;
+
+  @Column({ nullable: true })
+  friendsCount: number;
+
   @OneToOne(() => User, (user) => user.profile)
   @JoinColumn()
   user: User;
