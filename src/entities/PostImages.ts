@@ -10,7 +10,7 @@ import Post from "./Post";
 @Entity()
 export class PostImages {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column()
   url: string;

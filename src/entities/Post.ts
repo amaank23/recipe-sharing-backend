@@ -14,7 +14,7 @@ import PostComments from "./PostComments";
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column({ nullable: true })
   content: string;

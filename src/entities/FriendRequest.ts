@@ -10,7 +10,7 @@ import { User } from "./User";
 @Entity()
 export class FriendRequest {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @ManyToOne(() => User)
   sender: User;

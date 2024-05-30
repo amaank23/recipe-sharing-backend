@@ -11,7 +11,7 @@ import Post from "./Post";
 @Entity()
 export class PostLikes {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @ManyToOne(() => User, (user) => user.id)
   user: User;

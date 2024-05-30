@@ -11,7 +11,7 @@ import { User } from "./User";
 @Unique(["user1", "user2"])
 export class Friend {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @ManyToOne(() => User)
   user1: User;

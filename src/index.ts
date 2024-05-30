@@ -33,7 +33,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use("/api/auth", AuthRouter);
 app.use("/api/profiles", ProfilesRouter);
 app.use("/api/posts", PostRouter);
-app.use("api/friends", FriendsRouter);
+app.use("/api/friends", FriendsRouter);
 
 app.use(errorMiddleware);
 

@@ -12,7 +12,7 @@ import User from "./User";
 @Entity()
 export class PostComments {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column()
   comment: string;
