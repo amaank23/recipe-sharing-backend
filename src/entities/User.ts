@@ -1,6 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  OneToMany,
+} from "typeorm";
 import { CreateDateColumn, UpdateDateColumn } from "typeorm";
 import Profile from "./Profile";
+import { Friend } from "./Friend";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -29,6 +36,12 @@ export class User {
 
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
+
+  @OneToMany(() => Friend, (friend) => friend.user1)
+  friends1: Friend[];
+
+  @OneToMany(() => Friend, (friend) => friend.user2)
+  friends2: Friend[];
 
   @CreateDateColumn({
     type: "timestamp",

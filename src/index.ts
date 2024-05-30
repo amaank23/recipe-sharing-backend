@@ -8,6 +8,7 @@ import { myDataSource } from "./app-data-source";
 import AuthRouter from "./routes/auth";
 import PostRouter from "./routes/posts";
 import ProfilesRouter from "./routes/profiles";
+import FriendsRouter from "./routes/friends";
 import "dotenv/config";
 import errorMiddleware from "./middlewares/errorMiddleware";
 
@@ -32,6 +33,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use("/api/auth", AuthRouter);
 app.use("/api/profiles", ProfilesRouter);
 app.use("/api/posts", PostRouter);
+app.use("api/friends", FriendsRouter);
 
 app.use(errorMiddleware);
 
