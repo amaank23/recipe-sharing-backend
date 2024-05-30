@@ -6,6 +6,8 @@ import PostLikes from "./entities/PostLikes";
 import PostImages from "./entities/PostImages";
 import PostComments from "./entities/PostComments";
 import Profile from "./entities/Profile";
+import { FriendRequest } from "./entities/FriendRequest";
+import { Friend } from "./entities/Friend";
 
 dotenv.config();
 export const myDataSource = new DataSource({
@@ -15,7 +17,16 @@ export const myDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Post, PostLikes, PostImages, PostComments, Profile],
+  entities: [
+    User,
+    Post,
+    PostLikes,
+    PostImages,
+    PostComments,
+    Profile,
+    FriendRequest,
+    Friend,
+  ],
   logging: true,
   synchronize: false,
   migrations: ["src/migrations/*{.ts,.js}"],
