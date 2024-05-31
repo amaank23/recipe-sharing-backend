@@ -8,6 +8,7 @@ import {
 import { CreateDateColumn, UpdateDateColumn } from "typeorm";
 import Profile from "./Profile";
 import { Friend } from "./Friend";
+import Recipe from "./Recipe";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -42,6 +43,9 @@ export class User {
 
   @OneToMany(() => Friend, (friend) => friend.user2)
   friends2: Friend[];
+
+  @OneToMany(() => Recipe, (recipe) => recipe.user)
+  recipes: Recipe[];
 
   @CreateDateColumn({
     type: "timestamp",

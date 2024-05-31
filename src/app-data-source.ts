@@ -8,6 +8,8 @@ import PostComments from "./entities/PostComments";
 import Profile from "./entities/Profile";
 import { FriendRequest } from "./entities/FriendRequest";
 import { Friend } from "./entities/Friend";
+import Ingredient from "./entities/Ingredient";
+import Recipe from "./entities/Recipe";
 
 dotenv.config();
 export const myDataSource = new DataSource({
@@ -26,6 +28,8 @@ export const myDataSource = new DataSource({
     Profile,
     FriendRequest,
     Friend,
+    Ingredient,
+    Recipe,
   ],
   logging: true,
   synchronize: false,
