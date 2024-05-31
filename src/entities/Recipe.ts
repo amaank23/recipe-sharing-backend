@@ -23,7 +23,9 @@ export class Recipe {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe)
+  @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe, {
+    cascade: true,
+  })
   ingredients: Ingredient[];
 
   @CreateDateColumn({

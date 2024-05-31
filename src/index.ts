@@ -9,6 +9,7 @@ import AuthRouter from "./routes/auth";
 import PostRouter from "./routes/posts";
 import ProfilesRouter from "./routes/profiles";
 import FriendsRouter from "./routes/friends";
+import RecipesRouter from "./routes/recipes";
 import "dotenv/config";
 import errorMiddleware from "./middlewares/errorMiddleware";
 
@@ -34,6 +35,7 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/profiles", ProfilesRouter);
 app.use("/api/posts", PostRouter);
 app.use("/api/friends", FriendsRouter);
+app.use("/api/recipes", RecipesRouter);
 
 app.use(errorMiddleware);
 
