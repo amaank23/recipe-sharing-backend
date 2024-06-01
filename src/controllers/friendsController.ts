@@ -3,7 +3,6 @@ import { FriendRequestRepository } from "../repository/friendRequest.repository"
 import CustomError from "../utils/error";
 import { FriendsRepository } from "../repository/friends.repository";
 import { CustomRequest } from "../middlewares/authMiddleware";
-import { UserRepository } from "../repository/user.repository";
 
 const sendFriendRequest = async (
   req: Request,
@@ -84,11 +83,12 @@ const getAllFriendRequests = async (
   const { status } = req.body;
   const userId = req.user.data.id;
   try {
-    const user = await UserRepository.findOne({ where: { id: userId } });
     const friendRequests = await FriendRequestRepository.find({
       where: {
         status,
-        receiver: user,
+        receiver: {
+          id: userId,
+        },
       },
     });
     res
@@ -110,9 +110,8 @@ const getAllFriends = async (
 ) => {
   const userId = req.user.data.id;
   try {
-    const user = await UserRepository.findOne({ where: { id: userId } });
     const friends = await FriendsRepository.find({
-      where: [{ user1: user }, { user2: user }],
+      where: [{ user1: { id: userId } }, { user2: { id: userId } }],
       relations: {
         user1: true,
         user2: true,
@@ -142,14 +141,10 @@ const checkIfFriend = async (
   const { friendId } = req.params;
 
   try {
-    const user = await UserRepository.findOne({ where: { id: userId } });
-    const friendUser = await UserRepository.findOne({
-      where: { id: friendId },
-    });
     const friendship = await FriendsRepository.findOne({
       where: [
-        { user1: user, user2: friendUser },
-        { user1: friendUser, user2: user },
+        { user1: { id: userId }, user2: { id: friendId } },
+        { user1: { id: friendId }, user2: { id: userId } },
       ],
     });
 
