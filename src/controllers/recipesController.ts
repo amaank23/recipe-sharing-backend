@@ -40,4 +40,36 @@ const addNewRecipeAndIngredients = async (
   }
 };
 
-export default { addNewRecipeAndIngredients };
+const getAllRecipes = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { page, limit } = req.query;
+  const itemsToSkip = (+page - 1) * +limit;
+  const userId = req.user.data.id;
+  try {
+    const recipes = await RecipeRepository.find({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+      relations: { ingredients: true },
+      order: { created_at: "DESC" },
+      take: +limit,
+      skip: itemsToSkip,
+    });
+    res
+      .status(200)
+      .json({ message: "Recipes Retrieved Successfully!", data: recipes });
+  } catch (error) {
+    const errors = {
+      status: CustomError.getStatusCode(error),
+      message: CustomError.getMessage(error),
+    };
+    next(errors);
+  }
+};
+
+export default { addNewRecipeAndIngredients, getAllRecipes };

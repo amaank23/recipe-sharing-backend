@@ -53,4 +53,38 @@ const router = Router();
  */
 router.post("/", authMiddleware, recipesController.addNewRecipeAndIngredients);
 
+/**
+ * @openapi
+ *  components:
+ *    securitySchemes:
+ *      bearerAuth:
+ *        type: http
+ *        scheme: bearer
+ *        bearerFormat: JWT
+ * '/api/recipes':
+ *  get:
+ *     tags:
+ *     - Recipes
+ *     summary: Get all recipes by userId
+ *     parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            required: true
+ *          - in: query
+ *            name: limit
+ *            schema:
+ *              type: integer
+ *            required: true
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *      200:
+ *        description: Success
+ *      500:
+ *        description: Server Error
+ */
+router.get("/", authMiddleware, recipesController.getAllRecipes);
+
 export default router;
